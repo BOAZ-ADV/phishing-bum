@@ -6,3 +6,8 @@ def del_stop_words(text):
     results = [text[i] for i in range(len(text)) if text[i] not in stopwords]
 
     return results
+
+# sample code
+'''
+tr['tokenized_del_stopwords'] = tr['tokenize_txt'].apply(lambda x : del_stop_words(x))
+'''
