@@ -3,7 +3,7 @@ from helper_function import text_clearing
 
 # real-time raw data
 
-# ATT API
+# STT API
 
 # preprocessing
 
