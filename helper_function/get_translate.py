@@ -4,7 +4,8 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 import API_KEY
 
-def papago_translate(text, In_lang, Out_lang):
+# based papago api
+def papago_get_translate(text, In_lang, Out_lang):
 
     client_id = API_KEY.GET_TRANSLATE_ID()
     client_secret = API_KEY.GET_TRANSLATE_KEY()
@@ -28,3 +29,11 @@ def papago_translate(text, In_lang, Out_lang):
 
     else:
         print('Error Code : {0}'.format(rescode))
+
+
+# based Pororo library
+def Pororo_get_translate(text, In_lang, Out_lang):
+
+    # 뽀로로 라이브러리 실험 해보기!
+    
+    return
