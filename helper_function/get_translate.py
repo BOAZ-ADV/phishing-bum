@@ -1,7 +1,13 @@
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
+import API_KEY
+
 def get_translate(text, In_lang, Out_lang):
 
-    client_id = 'id'
-    client_secret = 'key'
+    client_id = API_KEY.GET_TRANSLATE_ID()
+    client_secret = API_KEY.GET_TRANSLATE_KEY()
 
     data = {'text' : text,       # text
             'source' : In_lang,  # Input lang
