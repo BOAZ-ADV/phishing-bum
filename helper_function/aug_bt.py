@@ -53,3 +53,7 @@ def Pororo_en_to_jp():
 def Pororo_jp_to_en():
 
     return
+
+def BT(df):
+
+    return
