@@ -37,3 +37,19 @@ def Pororo_get_translate(text, In_lang, Out_lang):
     # 뽀로로 라이브러리 실험 해보기!
     
     return
+
+def Pororo_en_to_ko():
+
+    return
+
+def Pororo_ko_to_en():
+
+    return
+
+def Pororo_en_to_jp():
+
+    return
+
+def Pororo_jp_to_en():
+
+    return
