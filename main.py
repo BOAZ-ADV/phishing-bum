@@ -1,12 +1,16 @@
-from helper_function import del_stopwords
-from helper_function import text_clearing
+from helper_function import pre_del_stopwords
+from helper_function import pre_text_clearing
 
-# real-time raw data
+def main():
 
-# STT API
+    # real-time raw data
 
-# preprocessing
+    # STT API
 
-# model
+    # preprocessing
 
-# result
+    # model
+
+    # result
+
+    return
