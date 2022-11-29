@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 import API_KEY
 
-# based papago api
+# based papago api 
 def papago_get_translate(text, In_lang, Out_lang):
 
     client_id = API_KEY.GET_TRANSLATE_ID()
