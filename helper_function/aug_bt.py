@@ -8,7 +8,7 @@ from googletrans import Translator
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 import API_KEY
 
-# based papago api 
+# papago api 
 def papago_get_translate(text, In_lang, Out_lang):
 
     client_id = API_KEY.GET_TRANSLATE_ID()
@@ -76,4 +76,4 @@ def BT_jp2ko(text):
 
 ''' sample '''
 # get_translate('안녕하세요!', 'ko', 'en')
-# BT_en2ko('hello')
+# BT_en2ko('hello!')
