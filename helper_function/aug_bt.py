@@ -1,6 +1,10 @@
 import sys
 import os
 
+# googletrans
+from googletrans import Translator
+
+# pororo app key
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 import API_KEY
 
@@ -31,29 +35,45 @@ def papago_get_translate(text, In_lang, Out_lang):
         print('Error Code : {0}'.format(rescode))
 
 
-# based Pororo library
-def Pororo_get_translate(text, In_lang, Out_lang):
+# googletrans
+def get_translate(text, inlang, outlang):
 
-    # 뽀로로 라이브러리 실험 해보기!
-    
-    return
+    translator = Translator()
+    trans = translator.translate(text, src=inlang, dest=outlang)
 
-def Pororo_en_to_ko():
+    print(f'translation result : {trans.text}')
 
-    return
+    return trans.text
 
-def Pororo_ko_to_en():
+# ko to en
+def BT_ko2en(text):
 
-    return
-
-def Pororo_en_to_jp():
+    get_translate(text, 'ko', 'en')
 
     return
 
-def Pororo_jp_to_en():
+# en to ko
+def BT_en2ko(text):
+
+    get_translate(text, 'en', 'ko')
 
     return
 
-def BT(df):
+# ko to jp
+def BT_ko2jp(text):
+
+    get_translate(text, 'ko', 'jp')
 
     return
+
+# jp to ko
+def BT_jp2ko(text):
+
+    get_translate(text, 'jp', 'ko')
+
+    return
+
+
+''' sample '''
+# get_translate('안녕하세요!', 'ko', 'en')
+# BT_en2ko('hello')
