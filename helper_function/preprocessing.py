@@ -47,9 +47,12 @@ def del_stopwords(text):
 
 
 # 토큰화
-def text_tokenize(df):
+def text_tokenize(text):
 
-    return
+    mecab = Mecab(r'C:\mecab\mecab-ko-dic')
+    out = mecab.morphs(text)
+
+    return out
 
 
 # 벡터화 (countervec)
@@ -58,14 +61,39 @@ def encoding_cnt(df):
     return
 
 
-# 벡터화 (tf-idf)
-def encoding_tf(df):
+# 벡터화 : fit_transform (tf-idf)
+def encoder_tf(df, colname):
 
-    return
+    df[colname] = df[colname].apply(lambda x : ' '.join(x))
+
+    tfvec = TfidfVectorizer()
+    out = tfvec.fit_transform(df[colname])
+
+    # tfvec = encoder
+    with open(r'C:\Project\sw-grad-proj\result\tfvec.pkl', 'wb') as f:
+        pickle.dump(tfvec, f)
+
+    return out # out = X_tr ecoding result
+
+
+# 벡터화 : transform (tf-idf)
+def encoding_tf(df, colname):
+
+    df[colname] = df[colname].apply(lambda x : ' '.join(x))
+
+    with open(r'C:\Project\sw-grad-proj\result\tfvec.pkl', 'rb') as f:
+        tfvec = pickle.load(f)
+        
+    out = tfvec.transform(df[colname])
+
+    return out # out = X_te ecoding result
 
 
 ''' sample '''
 # train = drop_duplicates(train, 'document')
 # train = drop_null(train)
 # train['document'] = train['document'].apply(lambda x : text_cleansing(x))
-# 
+# train['document'] = train['document'].apply(lambda x : del_stopwords(x))
+# train['document'] = train['document'].apply(lambda x : text_tokenize(x))
+# encoder_tf(train, 'document')
+# X_te = encoding_tf(test, 'document')
