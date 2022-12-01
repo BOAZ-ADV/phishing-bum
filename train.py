@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 import re
 import pickle
+import time
 
 from tqdm import tqdm
 tqdm.pandas() # progress
@@ -104,8 +105,8 @@ def train(X, y):
         # == eval moel ==
         pred = clf.predict(X_val_fin)
         acc, f1 = metrics.metrics(y_val, pred)
-        print(f'tr acc : {acc}')
-        print(f'tr f1 : {f1}')
+        print(f'tr acc, f1 : {acc}, {f1}')
+        time.sleep(0.5)
         # print('Done. (train/eval model) \n')
 
         # == check best model == 
