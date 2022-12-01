@@ -64,14 +64,14 @@ def BT_en2ko(text):
 # ko to jp
 def BT_ko2jp(text):
 
-    out = get_translate(text, 'ko', 'jp')
+    out = get_translate(text, 'ko', 'ja')
 
     return out
 
 # jp to ko
 def BT_jp2ko(text):
 
-    out = get_translate(text, 'jp', 'ko')
+    out = get_translate(text, 'ja', 'ko')
 
     return out
 
