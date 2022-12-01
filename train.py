@@ -102,7 +102,7 @@ def train(X, y):
         clf = LGBMClassifier()
         clf.fit(X_tr_fin, y_tr_fin) # , callbacks=[tqdm_callback])
 
-        # == eval moel ==
+        # == eval model ==
         pred = clf.predict(X_val_fin)
         acc, f1 = metrics.metrics(y_val, pred)
         print(f'tr acc, f1 : {acc}, {f1}')

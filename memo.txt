@@ -1,5 +1,5 @@
 1) 데이터 로드
-2) stratified split 5 kfold
+2) stratified split 5 k-fold
 
 == 아래 과정 5번 반복 ==
 
@@ -20,13 +20,13 @@
 	- 텍스트 클렌징
 	- 토큰화
 	- 불용어 제거
-	- encoding transform만
+	- encoding transform 만
 6) model train
 7) if best model ?
 	- save best model
 	- save best encoder
 
-== stratified kfold 종료 ==
+== stratified k-fold 종료 ==
 
-9) best model & encoder load 후 real-time clf 진행
+8) best model & encoder load 후 real-time clf 진행
 
