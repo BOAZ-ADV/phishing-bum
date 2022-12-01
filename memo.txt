@@ -1,0 +1,32 @@
+1) 데이터 로드
+2) stratified split 5 kfold
+
+== 아래 과정 5번 반복 ==
+
+3) train data augmentation
+	- BT
+	- BT + origin concat
+	- 추가적으로 이 부분에서 다른 aug + concat 도 진행
+4) train data preprocessing
+	- 데이터 중복 제거
+	- 결측치 제거
+	- 텍스트 클렌징
+	- 토큰화
+	- 불용어 제거
+	- encoder fit_transform
+5) valid data preprocessing
+	- 데이터 중복 제거
+	- 결측치 제거
+	- 텍스트 클렌징
+	- 토큰화
+	- 불용어 제거
+	- encoding transform만
+6) model train
+7) if best model ?
+	- save best model
+	- save best encoder
+
+== stratified kfold 종료 ==
+
+9) best model & encoder load 후 real-time clf 진행
+
