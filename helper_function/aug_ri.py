@@ -3,6 +3,7 @@ import random
 import pickle
 import re
 
+
 # 동의어 사전
 wordnet = {}
 with open("wordnet.pickle", "rb") as f:
@@ -20,44 +21,48 @@ def get_synonyms(word):
 
 	return synomyms
 
-
 def random_insertion(words, n):
 	new_words = words.copy()
+
 	for _ in range(n):
 		add_word(new_words)
 	
 	return new_words
 
-
+# 랜덤으로 추가할 단어
 def add_word(new_words):
 	synonyms = []
 	counter = 0
+
 	while len(synonyms) < 1:
+
 		if len(new_words) >= 1:
-			random_word = new_words[random.randint(0, len(new_words)-1)]
+			random_word = new_words[random.randint(0, len(new_words) - 1)]
 			synonyms = get_synonyms(random_word)
 			counter += 1
+			
 		else:
-			random_word = ""
+			random_word = ''
 
 		if counter >= 10:
 			return
 		
 	random_synonym = synonyms[0]
-	random_idx = random.randint(0, len(new_words)-1)
+	random_idx = random.randint(0, len(new_words) - 1)
 	new_words.insert(random_idx, random_synonym)
 
-
+# RI aug
 def RI(sentence, alpha_ri=0.1, num_aug=9):
+
 	# sentence = get_only_hangul(sentence)
 	words = sentence.split(' ')
-	words = [word for word in words if word is not ""]
+	words = [word for word in words if word is not '']
 	num_words = len(words)
 
 	augmented_sentences = []
-	num_new_per_technique = int(num_aug/4) + 1
+	num_new_per_technique = int(num_aug / 4) + 1
 
-	n_ri = max(1, int(alpha_ri*num_words))
+	n_ri = max(1, int(alpha_ri * num_words))
 
 	# ri
 	for _ in range(num_new_per_technique):

@@ -5,7 +5,7 @@ def main():
 
     # real-time raw data
 
-    # STT API
+    # VITO API
 
     # preprocessing
 

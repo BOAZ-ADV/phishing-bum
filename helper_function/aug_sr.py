@@ -4,40 +4,47 @@ import pickle
 import re
 import pandas as pd
 
+
+# 한글 사전 불러오기
 wordnet = {}
 with open("wordnet.pickle", "rb") as f:
 	wordnet = pickle.load(f)
 
-# 한글만 남기고 나머지는 삭제
+# 텍스트 한글만 남기고 삭제
 def get_only_hangul(line):
-	parseText= re.compile('/ ^[ㄱ-ㅎㅏ-ㅣ가-힣]*$/').sub('',line)
-
+	parseText= re.compile('/ ^[ㄱ-ㅎㅏ-ㅣ가-힣]*$/').sub('', line)
 	return parseText
 
+# 한글 사전에서 text 랜덤으로 대체
 def synonym_replacement(words, n):
+
 	new_words = words.copy()
 	random_word_list = list(set([word for word in words]))
 	random.shuffle(random_word_list)
 	num_replaced = 0
+
 	for random_word in random_word_list:
 		synonyms = get_synonyms(random_word)
+
 		if len(synonyms) > 1:
 			synonym = random.choice(list(synonyms))
 			new_words = [synonym if word == random_word else word for word in new_words]
 			num_replaced += 1
+
 		if num_replaced >= n:
 			break
 
 	if len(new_words) != 0:
 		sentence = ' '.join(new_words)
-		new_words = sentence.split(" ")
+		new_words = sentence.split(' ')
 
 	else:
-		new_words = ""
+		new_words = ''
 
 	return new_words
 
 
+# 유의어 가져오기
 def get_synonyms(word):
 	synomyms = []
 
@@ -50,10 +57,12 @@ def get_synonyms(word):
 
 	return synomyms
 
+# SR aug
 def SR(sentence, alpha_sr=1, num_aug=9):
+
 	sentence = get_only_hangul(sentence)
 	words = sentence.split(' ')
-	words = [word for word in words if word is not ""]
+	words = [word for word in words if word is not '']
 	num_words = len(words)
 
 	augmented_sentences = []
