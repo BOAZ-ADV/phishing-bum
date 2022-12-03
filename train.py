@@ -69,7 +69,7 @@ def train(X, y):
         ''' del '''
 
         # == tr aug ==
-        out_en['label'] = X_tr.copy() # [X_tr['label'] == 1].copy()
+        out_en = X_tr.copy() # [X_tr['label'] == 1].copy()
         out_en['txt'] = X_tr['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))
         out_en['txt'] = out_en['txt'].apply(lambda x : aug_bt.BT_en2ko(x))
         out_en_y = y_tr.copy()

@@ -1,3 +1,7 @@
 # BT
 # https://pypi.org/project/googletrans/
 pip install googletrans==4.0.0-rc1
+
+# audio
+pip install pyaudio
+pip install wave
