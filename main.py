@@ -12,5 +12,5 @@ def main():
     # model
 
     # result
-    print('test for git')
+    
     return
