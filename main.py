@@ -12,6 +12,5 @@ def main():
     # model
 
     # result
-    return 132
-
-print(main())
+    
+    return
