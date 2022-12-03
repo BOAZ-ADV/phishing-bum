@@ -3,7 +3,7 @@ import random
 import pickle
 import re
 
-#동의어 사전
+# 동의어 사전
 wordnet = {}
 with open("wordnet.pickle", "rb") as f:
 	wordnet = pickle.load(f)
@@ -47,6 +47,7 @@ def add_word(new_words):
 	random_idx = random.randint(0, len(new_words)-1)
 	new_words.insert(random_idx, random_synonym)
 
+
 def RI(sentence, alpha_ri=0.1, num_aug=9):
 	# sentence = get_only_hangul(sentence)
 	words = sentence.split(' ')
@@ -57,8 +58,6 @@ def RI(sentence, alpha_ri=0.1, num_aug=9):
 	num_new_per_technique = int(num_aug/4) + 1
 
 	n_ri = max(1, int(alpha_ri*num_words))
-
-
 
 	# ri
 	for _ in range(num_new_per_technique):

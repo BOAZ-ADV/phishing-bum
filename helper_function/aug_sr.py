@@ -61,7 +61,6 @@ def SR(sentence, alpha_sr=1, num_aug=9):
 
 	n_sr = max(1, int(alpha_sr*num_words))
 
-
 	# sr
 	for _ in range(num_new_per_technique):
 		a_words = synonym_replacement(words, n_sr)
