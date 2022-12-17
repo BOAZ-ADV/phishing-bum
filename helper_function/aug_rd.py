@@ -1,7 +1,5 @@
 # aug based RD
 # hyper-parameter : w = 0.1
-w = 0.1
-
 
 # p = 삭제 확률
 def random_deletion(words, p):
@@ -23,9 +21,9 @@ def random_deletion(words, p):
 	return new_words
 
 
-def RD(df):
+# def RD(df):
 	
-    for i in range(len(df)):
-        df.iloc[i,0] = ' '.join(random_deletion(df.iloc[i,0].split(' '),w))
+#     for i in range(len(df)):
+#         df.iloc[i,0] = ' '.join(random_deletion(df.iloc[i,0].split(' '),w))
 
-    return df
+#     return df
