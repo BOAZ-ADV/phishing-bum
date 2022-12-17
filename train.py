@@ -62,10 +62,10 @@ def train(X, y):
 
         ''' del '''
         # + data aug 시 class == 1 인 데이터에 대해서만 증강하도록 수정 필요 (이건 다음주에 해 보아요.......)
-        X_tr = X_tr.iloc[:2]
-        X_val = X_val.iloc[:2]
-        y_tr = y_tr.iloc[:2]
-        y_val = y_val.iloc[:2]
+        X_tr = X_tr.iloc # [:2]
+        X_val = X_val.iloc # [:2]
+        y_tr = y_tr.iloc # [:2]
+        y_val = y_val.iloc # [:2]
         ''' del '''
 
         # == tr aug ==
