@@ -4,6 +4,7 @@ from sklearn.model_selection import StratifiedKFold
 from helper_function import preprocessing
 from helper_function import aug_bt
 from helper_function import metrics
+import dataset
 
 from lightgbm import LGBMClassifier
 
@@ -20,17 +21,11 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-# train.py start
+# start train.py
 print('\n== start train.py ==')
 
-# 데이터 로드
-df = pd.read_csv(r'C:\Project\phishing_bum\phishing-bum\data\raw.csv')
-# print(f'df shape : {df.shape}')
-
-# X, y
-X = df['txt']
-y = df['label']
-# print(f'X, y shape : {X.shape}, {y.shape}\n')
+# load data
+X, y = dataset.make_dataset()
 
 # model list
 model_list = []
@@ -61,11 +56,13 @@ def train(X, y):
         # print('Done. (split) \n')
 
         ''' del '''
+        '''
         # + data aug 시 class == 1 인 데이터에 대해서만 증강하도록 수정 필요 (이건 다음주에 해 보아요.......)
-        X_tr = X_tr.iloc # [:2]
-        X_val = X_val.iloc # [:2]
-        y_tr = y_tr.iloc # [:2]
-        y_val = y_val.iloc # [:2]
+        X_tr = X_tr.iloc
+        X_val = X_val.iloc
+        y_tr = y_tr.iloc
+        y_val = y_val.iloc
+        '''
         ''' del '''
 
         # == tr aug ==
