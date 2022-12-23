@@ -8,6 +8,11 @@ def make_dataset():
     # X, y
     X = df['txt']
     y = df['label']
+    X = pd.DataFrame(X)
+    y = pd.DataFrame(y)
     # print(f'X, y shape : {X.shape}, {y.shape}\n')
 
     return X, y
+
+''' sample '''
+# make_dataset()

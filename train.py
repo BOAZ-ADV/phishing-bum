@@ -31,9 +31,7 @@ X, y = dataset.make_dataset()
 model_list = []
 
 
-def train(X, y):
-
-    # print('\n== stratified 5-fold start==\n')
+def train(X, y, model='LGBM'):
 
     kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
     k = kfold.get_n_splits(X, y)
@@ -46,30 +44,22 @@ def train(X, y):
 
         # k-fold
         print(f'\n== K-FOLD {cnt_kfold} ==\n')
-        print(f'TRAIN : {tr_idx}')
-        print(f'VALID : {val_idx}')
+        print(f'TRAIN : {tr_idx}')   # kfold train index
+        print(f'VALID : {val_idx}')  # kfold test index
 
         # == split ==
-        X_tr, X_val = X[tr_idx], X[val_idx]
-        y_tr, y_val = y[tr_idx], y[val_idx]
+        X_tr, X_val = X.iloc[tr_idx], X.iloc[val_idx]
+        y_tr, y_val = y.iloc[tr_idx], y.iloc[val_idx]
         X_tr, X_val, y_tr, y_val = pd.DataFrame(X_tr), pd.DataFrame(X_val), pd.DataFrame(y_tr), pd.DataFrame(y_val)
-        # print('Done. (split) \n')
-
-        ''' del '''
-        '''
-        # + data aug 시 class == 1 인 데이터에 대해서만 증강하도록 수정 필요 (이건 다음주에 해 보아요.......)
-        X_tr = X_tr.iloc
-        X_val = X_val.iloc
-        y_tr = y_tr.iloc
-        y_val = y_val.iloc
-        '''
-        ''' del '''
 
         # == tr aug ==
-        out_en = X_tr.copy() # [X_tr['label'] == 1].copy()
+        out = pd.concat([X_tr, y_tr], axis=1)
+        out_en = out[out['label'] == 1].copy()
+        print(out_en)
+        return
         out_en['txt'] = X_tr['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))
         out_en['txt'] = out_en['txt'].apply(lambda x : aug_bt.BT_en2ko(x))
-        out_en_y = y_tr.copy()
+        out_en_y = pd.DataFrame({'label' : [1] * len(out_en)}) # y_tr.copy()
         # print('Done. (aug)')
         
         # tr concat : origin + aug
@@ -78,12 +68,12 @@ def train(X, y):
         # print('Done. (concat)')
         
         # == tr preprocessing ==
-        X_tr_aug['txt'] = preprocessing.drop_duplicates(X_tr_aug['txt']) # 데이터 중복 제거
-        X_tr_aug['txt'] = preprocessing.drop_null(X_tr_aug['txt']) # 결측치 제거
+        X_tr_aug['txt'] = preprocessing.drop_duplicates(X_tr_aug['txt'])                    # 데이터 중복 제거
+        X_tr_aug['txt'] = preprocessing.drop_null(X_tr_aug['txt'])                          # 결측치 제거
         X_tr_aug['txt'] = X_tr_aug['txt'].apply(lambda x : preprocessing.text_cleansing(x)) # 텍스트 킄렌징
         X_tr_aug['txt'] = X_tr_aug['txt'].apply(lambda x : preprocessing.text_tokenize(x))  # 토큰화
         X_tr_aug['txt'] = X_tr_aug['txt'].apply(lambda x : preprocessing.del_stopwords(x))  # 불용어 제거
-        X_tr_fin = preprocessing.encoder_tf(X_tr_aug['txt']) # create X_tr_fin & fit_transform tf-idf encoder
+        X_tr_fin = preprocessing.encoder_tf(X_tr_aug['txt'])                                # X_tr_fin & fit_transform tf-idf encoder 생성
         # print('Done. (tr preprocessing)')
 
         # == val preprocessing ==
@@ -107,11 +97,12 @@ def train(X, y):
         # print('Done. (train/eval model) \n')
 
         # == check best model == 
-        if acc > best_acc:
+        if f1 > best_f1:
             # == save best model and vectorizer ==
+            best_f1 = f1
             best_acc = acc
             best_model = clf
-            pickle.dump(best_model, open(r'C:\Project\phishing_bum\phishing-bum\result\best_model.pkl', 'wb')) # save best model
+            pickle.dump(best_model, open(r'C:\Project\phishing_bum\phishing-bum\result\best_f1_model.pkl', 'wb')) # save best model
             preprocessing.save_encoder_tf(X_tr_aug['txt']) # save best encoder
             
         cnt_kfold += 1
