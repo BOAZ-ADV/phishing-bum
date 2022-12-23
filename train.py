@@ -4,6 +4,7 @@ from sklearn.model_selection import StratifiedKFold
 from helper_function import preprocessing
 from helper_function import aug_bt
 from helper_function import metrics
+from helper_function import seed
 import dataset
 
 from lightgbm import LGBMClassifier
@@ -42,6 +43,9 @@ def train(X, y, model='LGBM'):
     # == k-fold idx ==
     for tr_idx, val_idx in kfold.split(X, y):
 
+        # seed everything
+        seed.seed_everything(0)
+
         # k-fold
         print(f'\n== K-FOLD {cnt_kfold} ==\n')
         print(f'TRAIN : {tr_idx}')   # kfold train index
@@ -53,13 +57,18 @@ def train(X, y, model='LGBM'):
         X_tr, X_val, y_tr, y_val = pd.DataFrame(X_tr), pd.DataFrame(X_val), pd.DataFrame(y_tr), pd.DataFrame(y_val)
 
         # == tr aug ==
-        out = pd.concat([X_tr, y_tr], axis=1)
+        out = pd.concat([X_tr, y_tr], axis=1).copy()
         out_en = out[out['label'] == 1].copy()
-        print(out_en)
         return
+
         out_en['txt'] = X_tr['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))
         out_en['txt'] = out_en['txt'].apply(lambda x : aug_bt.BT_en2ko(x))
-        out_en_y = pd.DataFrame({'label' : [1] * len(out_en)}) # y_tr.copy()
+        
+        out_en_y = out_en['label'].copy()
+        out_en = out_en['txt'].copy()
+        print(out_en_y)
+        print(out_en)
+        return
         # print('Done. (aug)')
         
         # tr concat : origin + aug
