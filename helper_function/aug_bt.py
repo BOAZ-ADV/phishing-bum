@@ -50,29 +50,67 @@ def get_translate(text, inlang, outlang):
 # ko to en
 def BT_ko2en(text):
 
-    out = get_translate(text, 'ko', 'en')
+    print(f'BT ko2en :')
+    print(f'{text}')
+    print(f'===>')
 
+    try:
+        out = get_translate(text, 'ko', 'en')
+    except:
+        print('None')
+        return None
+        
+
+    print(f'{out}')
     return out
 
 # en to ko
 def BT_en2ko(text):
 
-    out = get_translate(text, 'en', 'ko')
+    print(f'BT en2ko :')
+    print(f'{text}')
+    print(f'===>')
 
+    try:
+        out = get_translate(text, 'en', 'ko')
+    except:
+        print('None')
+        return None
+        
+
+    print(f'{out}')
     return out
 
 # ko to jp
 def BT_ko2jp(text):
 
-    out = get_translate(text, 'ko', 'ja')
+    print(f'BT ko2jp :')
+    print(f'{text}')
+    print(f'===>')
 
+    try:
+        out = get_translate(text, 'ko', 'ja')
+    except:
+        print('None')
+        return None
+
+    print(f'{out}')
     return out
 
 # jp to ko
 def BT_jp2ko(text):
 
-    out = get_translate(text, 'ja', 'ko')
+    print(f'BT jp2ko :')
+    print(f'{text}')
+    print(f'===>')
 
+    try:
+        out = get_translate(text, 'ja', 'ko')
+    except:
+        print('None')
+        return None
+
+    print(f'{out}')
     return out
 
 
