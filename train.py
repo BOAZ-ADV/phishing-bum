@@ -57,23 +57,19 @@ def train(X, y, model='LGBM'):
         X_tr, X_val, y_tr, y_val = pd.DataFrame(X_tr), pd.DataFrame(X_val), pd.DataFrame(y_tr), pd.DataFrame(y_val)
 
         # == tr aug ==
-        out = pd.concat([X_tr, y_tr], axis=1).copy()
-        out_en = out[out['label'] == 1].copy()
-        return
+        out = pd.concat([X_tr, y_tr], axis=1).copy()  # train copy
 
-        out_en['txt'] = X_tr['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))
-        out_en['txt'] = out_en['txt'].apply(lambda x : aug_bt.BT_en2ko(x))
+        out_en = out[out['label'] == 1].copy()                                       # train 중 피싱 데이터만 copy
+        out_en['txt'] = X_tr['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))    # txt column 에 bt en 적용
+        out_en['txt'] = out_en['txt'].apply(lambda x : aug_bt.BT_en2ko(x))           # txt column 에 bt ko 적용
         
-        out_en_y = out_en['label'].copy()
-        out_en = out_en['txt'].copy()
-        print(out_en_y)
-        print(out_en)
-        return
+        out_en_y = out_en['label'].copy()  # bt result y
+        out_en = out_en['txt'].copy()      # bt result txt
         # print('Done. (aug)')
         
         # tr concat : origin + aug
-        X_tr_aug = pd.concat([X_tr, out_en], ignore_index=True)
-        y_tr_fin = pd.concat([y_tr, out_en_y], ignore_index=True)
+        X_tr_aug = pd.concat([X_tr, out_en], ignore_index=True)      # fin train txt (raw + aug)
+        y_tr_fin = pd.concat([y_tr, out_en_y], ignore_index=True)    # fin train y   (raw + aug)
         # print('Done. (concat)')
         
         # == tr preprocessing ==
@@ -95,7 +91,9 @@ def train(X, y, model='LGBM'):
         # print('Done. (val preprocessing) \n')
 
         # == train model ==
-        clf = LGBMClassifier()
+        if model == 'LGBM':         # select model
+            clf = LGBMClassifier()
+
         clf.fit(X_tr_fin, y_tr_fin) # , callbacks=[tqdm_callback])
 
         # == eval model ==
@@ -120,4 +118,4 @@ def train(X, y, model='LGBM'):
 
 
 ''' sample '''
-train(X, y)
+train(X, y, 'LGBM')
