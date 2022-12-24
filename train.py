@@ -172,7 +172,7 @@ def train(X, y, model='LGBM', BT=True):
 
     print(f'\n')
     print(f'best acc, f1, recall : {best_acc}, {best_f1}, {best_recall}')
-    print(f'avg acc, f1, recall : {cumsum_acc / 5}, {cumsum_f1 / 5}, {cumsum_recall / 5}')
+    print(f'avg acc, f1, recall : {round(cumsum_acc / 5, 5)}, {round(cumsum_f1 / 5, 5)}, {round(cumsum_recall / 5, 5)}')
     print(f'check best model : ./result/best_f1_model.pkl') # 저장된 best model & encoder 이름 바꾸기
     return
 
