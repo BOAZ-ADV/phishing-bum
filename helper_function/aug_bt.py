@@ -63,8 +63,11 @@ def BT_ko2en(text):
         out = get_translate(text, 'ko', 'en')
     except:
         print('None')
-        if len(text) >= 20: print(f'raw : {text[:20]}')
-        else: print(f'raw : {text}')
+        try:    # out None
+            if len(text) >= 20: print(f'raw : {text[:20]}')
+            else: print(f'raw : {text}')
+        except: # text None
+            return None
         return None
     
     '''
@@ -81,8 +84,11 @@ def BT_en2ko(text):
         out = get_translate(text, 'en', 'ko')
     except:
         print('None')
-        if len(text) >= 20: print(f'raw : {text[:20]}')
-        else: print(f'raw : {text}')
+        try:
+            if len(text) >= 20: print(f'raw : {text[:20]}')
+            else: print(f'raw : {text}')
+        except: # text : None
+            return None
         return None
     
     return out
@@ -94,8 +100,11 @@ def BT_ko2jp(text):
         out = get_translate(text, 'ko', 'ja')
     except:
         print('None')
-        if len(text) >= 20: print(f'raw : {text[:20]}')
-        else: print(f'raw : {text}')
+        try:
+            if len(text) >= 20: print(f'raw : {text[:20]}')
+            else: print(f'raw : {text}')
+        except: # text : None
+            return None
         return None
 
     return out
@@ -107,8 +116,11 @@ def BT_jp2ko(text):
         out = get_translate(text, 'ja', 'ko')
     except:
         print('None')
-        if len(text) >= 20: print(f'raw : {text[:20]}')
-        else: print(f'raw : {text}')
+        try:
+            if len(text) >= 20: print(f'raw : {text[:20]}')
+            else: print(f'raw : {text}')
+        except: # text : None
+            return None
         return None
     
     return out

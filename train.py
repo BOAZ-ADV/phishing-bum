@@ -106,7 +106,7 @@ def train(X, y, model='LGBM'):
         if model == 'LGBM':         # select model
             clf = LGBMClassifier()
         elif model == 'XGB':
-            clf = XGB
+            clf = XGBClassifier()
 
         clf.fit(X_tr_fin, y_tr_fin) # , callbacks=[tqdm_callback])
 
