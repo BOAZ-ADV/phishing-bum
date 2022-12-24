@@ -10,6 +10,7 @@ from helper_function import seed
 import dataset
 
 # model
+from sklearn.ensemble import RandomForestClassifier
 from lightgbm import LGBMClassifier
 from xgboost import XGBClassifier
 
@@ -37,13 +38,14 @@ X, y = dataset.make_dataset()
 model_list = []
 
 
-def train(X, y, model='LGBM'):
+def train(X, y, model='LGBM', BT=True):
 
     kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
     k = kfold.get_n_splits(X, y)
     # print(f'split k : {k}')
     cnt_kfold = 1
-    best_acc, best_f1 = 0, 0 # to save best model
+    best_acc, best_f1, best_recall = 0, 0, 0 # to save best model
+    cumsum_acc, cumsum_f1, cumsum_recall = 0, 0, 0
 
     # == k-fold idx ==
     for tr_idx, val_idx in kfold.split(X, y):
@@ -61,45 +63,78 @@ def train(X, y, model='LGBM'):
         y_tr, y_val = y.iloc[tr_idx], y.iloc[val_idx]
         X_tr, X_val, y_tr, y_val = pd.DataFrame(X_tr), pd.DataFrame(X_val), pd.DataFrame(y_tr), pd.DataFrame(y_val)
 
-        # == tr aug ==
-        out = pd.concat([X_tr, y_tr], axis=1).copy()  # train copy
+        ''' del '''
+        # X_tr = X_tr.iloc[:2]
+        # y_tr = y_tr.iloc[:2]
+        # print(X_tr.shape, y_tr.shape)
+        ''' del '''
 
-        out_en = out[out['label'] == 1].copy()                                         # train 중 피싱 데이터만 copy
-        out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))    # txt column 에 bt en 적용
-        out_en['txt'] = out_en['txt'].apply(lambda x : aug_bt.BT_en2ko(x))             # txt column 에 bt ko 적용
-        print(f'raw shape : {out.shape}')
-        print(f'aug shape : {out_en.shape}')
-        print(f'raw sample :')
-        print(f'{out.iloc[0]}')
-        print(f'aug sample :')
-        print(f'{out_en.iloc[0]}')
+        if BT == True:
+
+            # == tr aug ==
+            out = pd.concat([X_tr, y_tr], axis=1).copy()  # train copy
+
+            out_en = out[out['label'] == 1].copy()                                         # train 중 피싱 데이터만 copy
+            out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))    # txt column 에 bt en 적용
+            out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_en2ko(x))    # txt column 에 bt ko 적용
+            print(f'raw shape : {out.shape}')
+            print(f'aug shape : {out_en.shape}')
+            '''
+            print(f'raw sample :')
+            print(f'{out.iloc[0]}')
+            print(f'aug sample :')
+            print(f'{out_en.iloc[0]}')
+            '''
+            
+            out_en_y = out_en['label']  # bt result y
+            out_en_txt = out_en['txt']  # bt result txt
+            out_en_y, out_en_txt = pd.DataFrame(out_en_y), pd.DataFrame(out_en_txt)
+            out_en_y.to_csv(f'./result/BTy{cnt_kfold}(en).csv')      # save aug y files   ''' change '''
+            out_en_txt.to_csv(f'./result/BTtxt{cnt_kfold}(en).csv')  # save aug txt files ''' change '''
+            # print('Done. (aug)')
+            
+            # tr concat : origin + aug
+            X_tr_aug = pd.concat([X_tr, out_en_txt], axis=0, ignore_index=True)  # fin train txt (raw + aug)
+            y_tr_fin = pd.concat([y_tr, out_en_y], axis=0, ignore_index=True)    # fin train y   (raw + aug)
+            print(f'concat shape : ({X_tr_aug.shape}, {y_tr_fin.shape}) \n')
+            print(f'raw + aug shape : {X_tr_aug.shape}')
+            # print('Done. (concat)')
         
-        out_en_y = out_en['label'].copy()  # bt result y
-        out_en_txt = out_en['txt'].copy()  # bt result txt
-        # print('Done. (aug)')
-        
-        # tr concat : origin + aug
-        X_tr_aug = pd.concat([X_tr, out_en_txt], ignore_index=True)      # fin train txt (raw + aug)
-        y_tr_fin = pd.concat([y_tr, out_en_y], ignore_index=True)    # fin train y   (raw + aug)
-        print(f'concat shape : ({X_tr_aug.shape}, {y_tr_fin.shape}) \n')
-        # print('Done. (concat)')
+        if BT == False:
+
+            X_tr_aug = X_tr.copy()
+            y_tr_fin = y_tr.copy()
+            print(f'shape : ({X_tr_aug.shape}, {y_tr_fin.shape}) \n')
         
         # == tr preprocessing ==
         X_tr_aug['txt'] = preprocessing.drop_duplicates(X_tr_aug['txt'])                    # 데이터 중복 제거
-        X_tr_aug['txt'] = preprocessing.drop_null(X_tr_aug['txt'])                          # 결측치 제거
+        print('Done. (drop duplicates)')
+        X_tr_aug['txt'] = preprocessing.drop_null(X_tr_aug['txt'])                          # 결측치 제거 (=> 확인)
+        print('Done. (drop null)')
         X_tr_aug['txt'] = X_tr_aug['txt'].apply(lambda x : preprocessing.text_cleansing(x)) # 텍스트 킄렌징
+        print('Done. (text cleansing)')
         X_tr_aug['txt'] = X_tr_aug['txt'].apply(lambda x : preprocessing.text_tokenize(x))  # 토큰화
+        print('Done. (tokenization)')
         X_tr_aug['txt'] = X_tr_aug['txt'].apply(lambda x : preprocessing.del_stopwords(x))  # 불용어 제거
+        print('Done. (del stopwords)')
+        print(f'raw + aug shape : {X_tr_aug.shape}')
         X_tr_fin = preprocessing.encoder_tf(X_tr_aug['txt'])                                # X_tr_fin & fit_transform tf-idf encoder 생성
+        print('Done. (train preprocessing)')
         # print('Done. (tr preprocessing)')
 
         # == val preprocessing ==
         X_val['txt'] = preprocessing.drop_duplicates(X_val['txt'])
+        print('Done. (drop duplicates)')
         X_val['txt'] = preprocessing.drop_null(X_val['txt'])
+        print('Done. (drop null)')
         X_val['txt'] = X_val['txt'].apply(lambda x : preprocessing.text_cleansing(x))
+        print('Done. (text cleansing)')
         X_val['txt'] = X_val['txt'].apply(lambda x : preprocessing.text_tokenize(x))
+        print('Done. (tokenization)')
         X_val['txt'] = X_val['txt'].apply(lambda x : preprocessing.del_stopwords(x))
+        print('Done. (del stopwords)')
         X_val_fin = preprocessing.encoding_tf(X_val['txt'])
+        print('Done. (valid preprocessing)')
         # print('Done. (val preprocessing) \n')
 
         # == train model ==
@@ -107,13 +142,18 @@ def train(X, y, model='LGBM'):
             clf = LGBMClassifier()
         elif model == 'XGB':
             clf = XGBClassifier()
+        elif model == 'RF':
+            clf = RandomForestClassifier()
 
         clf.fit(X_tr_fin, y_tr_fin) # , callbacks=[tqdm_callback])
 
         # == eval model ==
         pred = clf.predict(X_val_fin)
-        acc, f1 = metrics.metrics(y_val, pred)
-        print(f'tr acc, f1 : {acc}, {f1}')
+        acc, f1, recall = metrics.metrics(y_val, pred)
+        print(f'acc, f1, recall : {acc}, {f1}, {recall}')
+        cumsum_acc += acc
+        cumsum_f1 += f1
+        cumsum_recall += recall
         time.sleep(0.5)
         # print('Done. (train/eval model) \n')
 
@@ -122,18 +162,23 @@ def train(X, y, model='LGBM'):
             # == save best model and vectorizer ==
             best_f1 = f1
             best_acc = acc
+            best_recall = recall
             best_model = clf
-            pickle.dump(best_model, open(r'C:\Project\phishing_bum\phishing-bum\result\best_f1_model.pkl', 'wb')) # save best model
+            pickle.dump(best_model, open('./result/best_f1_model.pkl', 'wb')) # save best model ''' change '''
             preprocessing.save_encoder_tf(X_tr_aug['txt']) # save best encoder
             
         cnt_kfold += 1
 
 
     print(f'\n')
-    print(f'best acc, f1 : {best_acc}, {best_f1}')
-    print(f'check best model : /result/best_f1_model.pkl')
+    print(f'best acc, f1, recall : {best_acc}, {best_f1}, {best_recall}')
+    print(f'avg acc, f1, recall : {cumsum_acc / 5}, {cumsum_f1 / 5}, {cumsum_recall / 5}')
+    print(f'check best model : ./result/best_f1_model.pkl') # 저장된 best model & encoder 이름 바꾸기
     return
 
 
 ''' sample '''
-train(X, y, 'LGBM')
+# train(X, y, 'LGBM', BT=True)
+train(X, y, 'LGBM', BT=False)
+# train(X, y, 'XGB', BT=True)
+# trian(X, y, 'RF', BT=True)

@@ -44,7 +44,7 @@ def text_cleansing(text):
 
     hangul = re.compile('[^ ㄱ-ㅣㅏ-ㅣ가-힣]+') # 한글이 아닌 텍스트를 찾음
     
-    return hangul.sub('', text) # .sub(치환할 문자열, target text)
+    return hangul.sub('', str(text)) # .sub(치환할 문자열, target text)
 
 
 # 불용어 제거
@@ -82,7 +82,7 @@ def encoder_tf(df):
     out = tfvec.fit_transform(df)
 
     # tfvec = encoder
-    with open(r'C:\Project\phishing_bum\phishing-bum\result\tfvec.pkl', 'wb') as f:
+    with open('./result/tfvec.pkl', 'wb') as f:
         pickle.dump(tfvec, f)
 
     return out # out = X_tr ecoding result
@@ -96,7 +96,7 @@ def save_encoder_tf(df):
     out = tfvec.fit_transform(df)
 
     # tfvec = encoder
-    with open(r'C:\Project\phishing_bum\phishing-bum\result\best_tfvec.pkl', 'wb') as f:
+    with open('./result/best_tfvec.pkl', 'wb') as f:
         pickle.dump(tfvec, f)
 
     return out # out = X_tr ecoding result
@@ -107,7 +107,7 @@ def encoding_tf(df):
 
     df = df.apply(lambda x : ' '.join(x))
 
-    with open(r'C:\Project\phishing_bum\phishing-bum\result\tfvec.pkl', 'rb') as f:
+    with open('./result/tfvec.pkl', 'rb') as f:
         tfvec = pickle.load(f)
         
     out = tfvec.transform(df)
@@ -120,7 +120,7 @@ def best_encoding_tf(df):
 
     df = df.apply(lambda x : ' '.join(x))
 
-    with open(r'C:\Project\phishing_bum\phishing-bum\result\best_tfvec.pkl', 'rb') as f:
+    with open('./result/best_tfvec.pkl', 'rb') as f:
         tfvec = pickle.load(f)
         
     out = tfvec.transform(df)
