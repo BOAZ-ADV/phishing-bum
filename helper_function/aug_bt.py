@@ -50,76 +50,60 @@ def get_translate(text, inlang, outlang):
 # ko to en
 def BT_ko2en(text):
 
+    '''
     print(f'BT ko2en :')
     if len(text) >= 10: print(f'{text[:10]}')
     else: print(text)
     print(f'===>')
+    '''
 
     try:
         out = get_translate(text, 'ko', 'en')
     except:
         print('None')
+        print(f'raw : {text}')
         return None
-        
+    
+    '''
     if len(out) >= 10: print(f'{out[:10]}')
     else: print(out)
+    '''
 
     return out
 
 # en to ko
 def BT_en2ko(text):
 
-    print(f'BT en2ko :')
-    if len(text) >= 10: print(f'{text[:10]}')
-    else: print(text)
-    print(f'===>')
-
     try:
         out = get_translate(text, 'en', 'ko')
     except:
         print('None')
+        print(f'raw : {text}')
         return None
-        
-    if len(out) >= 10: print(f'{out[:10]}')
-    else: print(out)
     
     return out
 
 # ko to jp
 def BT_ko2jp(text):
 
-    print(f'BT ko2jp :')
-    if len(text) >= 10: print(f'{text[:10]}')
-    else: print(text)
-    print(f'===>')
-
     try:
         out = get_translate(text, 'ko', 'ja')
     except:
         print('None')
+        print(f'raw : {text}')
         return None
 
-    if len(out) >= 10: print(f'{out[:10]}')
-    else: print(out)
-    
     return out
 
 # jp to ko
 def BT_jp2ko(text):
 
-    print(f'BT jp2ko :')
-    if len(text) >= 10: print(f'{text[:10]}')
-    else: print(text)
-    print(f'===>')
-
     try:
         out = get_translate(text, 'ja', 'ko')
     except:
         print('None')
+        print(f'raw : {text}')
         return None
-
-    if len(out) >= 10: print(f'{out[:10]}')
-    else: print(out)
     
     return out
 
