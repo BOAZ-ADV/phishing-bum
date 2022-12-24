@@ -1,23 +1,28 @@
+# preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import StratifiedKFold
 
+# helper module
 from helper_function import preprocessing
 from helper_function import aug_bt
 from helper_function import metrics
 from helper_function import seed
 import dataset
 
+# model
 from lightgbm import LGBMClassifier
+from xgboost import XGBClassifier
 
+# tqdm
+from tqdm import tqdm
+tqdm.pandas() # progress
+
+# other libraries
 import pandas as pd
 import numpy as np
 import re
 import pickle
 import time
-
-from tqdm import tqdm
-tqdm.pandas() # progress
-
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -49,7 +54,7 @@ def train(X, y, model='LGBM'):
         # k-fold
         print(f'\n== K-FOLD {cnt_kfold} ==\n')
         print(f'TRAIN : {tr_idx}')   # kfold train index
-        print(f'VALID : {val_idx}')  # kfold test index
+        print(f'VALID : {val_idx} \n')  # kfold test index
 
         # == split ==
         X_tr, X_val = X.iloc[tr_idx], X.iloc[val_idx]
@@ -59,17 +64,24 @@ def train(X, y, model='LGBM'):
         # == tr aug ==
         out = pd.concat([X_tr, y_tr], axis=1).copy()  # train copy
 
-        out_en = out[out['label'] == 1].copy()                                       # train 중 피싱 데이터만 copy
-        out_en['txt'] = X_tr['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))    # txt column 에 bt en 적용
-        out_en['txt'] = out_en['txt'].apply(lambda x : aug_bt.BT_en2ko(x))           # txt column 에 bt ko 적용
+        out_en = out[out['label'] == 1].copy()                                         # train 중 피싱 데이터만 copy
+        out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))    # txt column 에 bt en 적용
+        out_en['txt'] = out_en['txt'].apply(lambda x : aug_bt.BT_en2ko(x))             # txt column 에 bt ko 적용
+        print(f'raw shape : {out.shape}')
+        print(f'aug shape : {out_en.shape}')
+        print(f'raw sample :')
+        print(f'{out.iloc[0]}')
+        print(f'aug sample :')
+        print(f'{out_en.iloc[0]}')
         
         out_en_y = out_en['label'].copy()  # bt result y
-        out_en = out_en['txt'].copy()      # bt result txt
+        out_en_txt = out_en['txt'].copy()  # bt result txt
         # print('Done. (aug)')
         
         # tr concat : origin + aug
-        X_tr_aug = pd.concat([X_tr, out_en], ignore_index=True)      # fin train txt (raw + aug)
+        X_tr_aug = pd.concat([X_tr, out_en_txt], ignore_index=True)      # fin train txt (raw + aug)
         y_tr_fin = pd.concat([y_tr, out_en_y], ignore_index=True)    # fin train y   (raw + aug)
+        print(f'concat shape : ({X_tr_aug.shape}, {y_tr_fin.shape}) \n')
         # print('Done. (concat)')
         
         # == tr preprocessing ==
@@ -93,6 +105,8 @@ def train(X, y, model='LGBM'):
         # == train model ==
         if model == 'LGBM':         # select model
             clf = LGBMClassifier()
+        elif model == 'XGB':
+            clf = XGB
 
         clf.fit(X_tr_fin, y_tr_fin) # , callbacks=[tqdm_callback])
 
@@ -114,6 +128,10 @@ def train(X, y, model='LGBM'):
             
         cnt_kfold += 1
 
+
+    print(f'\n')
+    print(f'best acc, f1 : {best_acc}, {best_f1}')
+    print(f'check best model : /result/best_f1_model.pkl')
     return
 
 
