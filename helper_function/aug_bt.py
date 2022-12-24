@@ -51,7 +51,8 @@ def get_translate(text, inlang, outlang):
 def BT_ko2en(text):
 
     print(f'BT ko2en :')
-    print(f'{text[:10]}')
+    if len(text) >= 10: print(f'{text[:10]}')
+    else: print(text)
     print(f'===>')
 
     try:
@@ -60,15 +61,17 @@ def BT_ko2en(text):
         print('None')
         return None
         
+    if len(out) >= 10: print(f'{out[:10]}')
+    else: print(out)
 
-    print(f'{out[:10]}')
     return out
 
 # en to ko
 def BT_en2ko(text):
 
     print(f'BT en2ko :')
-    print(f'{text[:10]}')
+    if len(text) >= 10: print(f'{text[:10]}')
+    else: print(text)
     print(f'===>')
 
     try:
@@ -77,15 +80,17 @@ def BT_en2ko(text):
         print('None')
         return None
         
-
-    print(f'{out[:10]}')
+    if len(out) >= 10: print(f'{out[:10]}')
+    else: print(out)
+    
     return out
 
 # ko to jp
 def BT_ko2jp(text):
 
     print(f'BT ko2jp :')
-    print(f'{text[:10]}')
+    if len(text) >= 10: print(f'{text[:10]}')
+    else: print(text)
     print(f'===>')
 
     try:
@@ -94,14 +99,17 @@ def BT_ko2jp(text):
         print('None')
         return None
 
-    print(f'{out[:10]}')
+    if len(out) >= 10: print(f'{out[:10]}')
+    else: print(out)
+    
     return out
 
 # jp to ko
 def BT_jp2ko(text):
 
     print(f'BT jp2ko :')
-    print(f'{text[:10]}')
+    if len(text) >= 10: print(f'{text[:10]}')
+    else: print(text)
     print(f'===>')
 
     try:
@@ -110,7 +118,9 @@ def BT_jp2ko(text):
         print('None')
         return None
 
-    print(f'{out[:10]}')
+    if len(out) >= 10: print(f'{out[:10]}')
+    else: print(out)
+    
     return out
 
 
