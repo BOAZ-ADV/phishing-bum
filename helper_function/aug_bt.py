@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 
 # googletrans
 from googletrans import Translator
@@ -39,6 +40,7 @@ def papago_get_translate(text, In_lang, Out_lang):
 def get_translate(text, inlang, outlang):
 
     translator = Translator()
+    time.sleep(0.1)
     trans = translator.translate(text, src=inlang, dest=outlang)
 
     # print(f'translation result : {trans.text}')
@@ -61,7 +63,8 @@ def BT_ko2en(text):
         out = get_translate(text, 'ko', 'en')
     except:
         print('None')
-        print(f'raw : {text}')
+        if len(text) >= 20: print(f'raw : {text[:20]}')
+        else: print(f'raw : {text}')
         return None
     
     '''
@@ -78,7 +81,8 @@ def BT_en2ko(text):
         out = get_translate(text, 'en', 'ko')
     except:
         print('None')
-        print(f'raw : {text}')
+        if len(text) >= 20: print(f'raw : {text[:20]}')
+        else: print(f'raw : {text}')
         return None
     
     return out
@@ -90,7 +94,8 @@ def BT_ko2jp(text):
         out = get_translate(text, 'ko', 'ja')
     except:
         print('None')
-        print(f'raw : {text}')
+        if len(text) >= 20: print(f'raw : {text[:20]}')
+        else: print(f'raw : {text}')
         return None
 
     return out
@@ -102,7 +107,8 @@ def BT_jp2ko(text):
         out = get_translate(text, 'ja', 'ko')
     except:
         print('None')
-        print(f'raw : {text}')
+        if len(text) >= 20: print(f'raw : {text[:20]}')
+        else: print(f'raw : {text}')
         return None
     
     return out

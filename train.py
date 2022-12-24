@@ -53,7 +53,7 @@ def train(X, y, model='LGBM'):
 
         # k-fold
         print(f'\n== K-FOLD {cnt_kfold} ==\n')
-        print(f'TRAIN : {tr_idx}')   # kfold train index
+        print(f'TRAIN : {tr_idx}')      # kfold train index
         print(f'VALID : {val_idx} \n')  # kfold test index
 
         # == split ==
