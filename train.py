@@ -38,7 +38,7 @@ X, y = dataset.make_dataset()
 model_list = []
 
 
-def train(X, y, model='LGBM', BT=True):
+def train(X, y, model='XGB', BT=True):
 
     kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
     k = kfold.get_n_splits(X, y)
@@ -75,8 +75,10 @@ def train(X, y, model='LGBM', BT=True):
             out = pd.concat([X_tr, y_tr], axis=1).copy()  # train copy
 
             out_en = out[out['label'] == 1].copy()                                         # train 중 피싱 데이터만 copy
-            out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))    # txt column 에 bt en 적용
-            out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_en2ko(x))    # txt column 에 bt ko 적용
+            # out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))    # txt column 에 bt en 적용
+            # out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_en2ko(x))    # txt column 에 bt ko 적용
+            out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_ko2jp(x))
+            out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_jp2ko(x))
             print(f'raw shape : {out.shape}')
             print(f'aug shape : {out_en.shape}')
             '''
@@ -89,8 +91,8 @@ def train(X, y, model='LGBM', BT=True):
             out_en_y = out_en['label']  # bt result y
             out_en_txt = out_en['txt']  # bt result txt
             out_en_y, out_en_txt = pd.DataFrame(out_en_y), pd.DataFrame(out_en_txt)
-            out_en_y.to_csv(f'./result/BTy{cnt_kfold}(en).csv')      # save aug y files   ''' change '''
-            out_en_txt.to_csv(f'./result/BTtxt{cnt_kfold}(en).csv')  # save aug txt files ''' change '''
+            out_en_y.to_csv(f'./result/BTy{cnt_kfold}(jp).csv')      # save aug y files   ''' change '''
+            out_en_txt.to_csv(f'./result/BTtxt{cnt_kfold}(jp).csv')  # save aug txt files ''' change '''
             # print('Done. (aug)')
             
             # tr concat : origin + aug
@@ -164,7 +166,7 @@ def train(X, y, model='LGBM', BT=True):
             best_acc = acc
             best_recall = recall
             best_model = clf
-            pickle.dump(best_model, open('./result/best_f1_model.pkl', 'wb')) # save best model ''' change '''
+            pickle.dump(best_model, open('./result/best_f1_model.pkl (xgb,bt_jp)', 'wb')) # save best model ''' change '''
             preprocessing.save_encoder_tf(X_tr_aug['txt']) # save best encoder
             
         cnt_kfold += 1
@@ -179,6 +181,7 @@ def train(X, y, model='LGBM', BT=True):
 
 ''' sample '''
 # train(X, y, 'LGBM', BT=True)
-train(X, y, 'LGBM', BT=False)
-# train(X, y, 'XGB', BT=True)
+# train(X, y, 'LGBM', BT=False)
+# train(X, y, 'XGB', BT=False)
+train(X, y, 'XGB', BT=True)
 # trian(X, y, 'RF', BT=True)

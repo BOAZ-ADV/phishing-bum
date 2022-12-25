@@ -3,7 +3,7 @@ import pandas as pd
 def make_dataset():
 
     # 데이터 로드
-    df = pd.read_csv(r'C:\Project\phishing_bum\phishing-bum\data\fin.csv')
+    df = pd.read_csv(r'C:\Users\82103\phishing-bum\data\fin.csv')
 
     # X, y
     X = df['txt']
