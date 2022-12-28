@@ -96,7 +96,7 @@ def save_encoder_tf(df):
     out = tfvec.fit_transform(df)
 
     # tfvec = encoder
-    with open('./result/best_tfvec(xgb,bt_jp).pkl', 'wb') as f:
+    with open('./result/best_tfvec.pkl', 'wb') as f:
         pickle.dump(tfvec, f)
 
     return out # out = X_tr ecoding result
