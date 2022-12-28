@@ -5,9 +5,9 @@ import time
 # googletrans
 from googletrans import Translator
 
-# pororo app key
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-import API_KEY
+# # pororo app key
+# sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
+# import API_KEY
 
 # papago api 
 def papago_get_translate(text, In_lang, Out_lang):

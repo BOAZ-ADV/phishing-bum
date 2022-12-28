@@ -166,7 +166,7 @@ def train(X, y, model='XGB', BT=True):
             best_acc = acc
             best_recall = recall
             best_model = clf
-            pickle.dump(best_model, open('./result/best_f1_model.pkl (xgb,bt_jp)', 'wb')) # save best model ''' change '''
+            pickle.dump(best_model, open('./result/best_f1_model (xgb,bt_jp).pkl', 'wb')) # save best model ''' change '''
             preprocessing.save_encoder_tf(X_tr_aug['txt']) # save best encoder
             
         cnt_kfold += 1
