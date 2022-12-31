@@ -7,7 +7,7 @@ import pandas as pd
 
 # 한글 사전 불러오기
 wordnet = {}
-with open("wordnet.pickle", "rb") as f:
+with open('./helper_function/wordnet.pickle', 'rb') as f:
 	wordnet = pickle.load(f)
 
 # 텍스트 한글만 남기고 삭제
@@ -58,7 +58,7 @@ def get_synonyms(word):
 	return synomyms
 
 # SR aug
-def SR(sentence, alpha_sr=1, num_aug=9):
+def SR(sentence, alpha_sr=0.15, num_aug=9):
 
 	sentence = get_only_hangul(sentence)
 	words = sentence.split(' ')
@@ -87,3 +87,8 @@ def SR(sentence, alpha_sr=1, num_aug=9):
 	augmented_sentences.append(sentence)
 
 	return augmented_sentences[1]
+
+# sample
+
+#r = SR('동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람 대한으로 길이 보전하세')
+#print(r)

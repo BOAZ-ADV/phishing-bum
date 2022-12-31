@@ -6,7 +6,7 @@ import re
 
 # 동의어 사전
 wordnet = {}
-with open("wordnet.pickle", "rb") as f:
+with open("./helper_function/wordnet.pickle", "rb") as f:
 	wordnet = pickle.load(f)
 
 def get_synonyms(word):
@@ -52,7 +52,7 @@ def add_word(new_words):
 	new_words.insert(random_idx, random_synonym)
 
 # RI aug
-def RI(sentence, alpha_ri=0.1, num_aug=9):
+def RI(sentence, alpha_ri=0.15, num_aug=9):
 
 	# sentence = get_only_hangul(sentence)
 	words = sentence.split(' ')
@@ -81,4 +81,9 @@ def RI(sentence, alpha_ri=0.1, num_aug=9):
 
 	augmented_sentences.append(sentence)
 
-	return augmented_sentences
+	return augmented_sentences[1]
+
+# sample
+
+#r = RI('동해물과 백두산이 마르고 닳도록 하느님이 보우하사 우리나라 만세 무궁화 삼천리 화려 강산 대한 사람 대한으로 길이 보전하세')
+#print(r)
