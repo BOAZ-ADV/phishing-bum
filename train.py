@@ -73,12 +73,19 @@ def train(X, y, model='XGB', BT=True):
 
             # == tr aug ==
             out = pd.concat([X_tr, y_tr], axis=1).copy()  # train copy
+            
+            out_en = out[out['label'] == 1].copy()                                         # train 중 피싱 데이터만 copy (en)
+            out_jp = out[out['label'] == 1].copy()                                         # train 중 피싱 데이터만 copy (jp)
 
-            out_en = out[out['label'] == 1].copy()                                         # train 중 피싱 데이터만 copy
-            # out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))    # txt column 에 bt en 적용
-            # out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_en2ko(x))    # txt column 에 bt ko 적용
-            out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_ko2jp(x))
-            out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_jp2ko(x))
+            out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_ko2en(x))    # txt column 에 bt en 적용
+            out_en['txt'] = out_en['txt'].progress_apply(lambda x : aug_bt.BT_en2ko(x))    # txt column 에 bt ko 적용
+
+            out_jp['txt'] = out_jp['txt'].progress_apply(lambda x : aug_bt.BT_ko2jp(x))    # txt column 에 bt jp 적용
+            out_jp['txt'] = out_jp['txt'].progress_apply(lambda x : aug_bt.BT_jp2ko(x))    # txt column 에 bt ko 적용
+
+            ## en, jp concat!
+            out_en['txt'] =  pd.concat([out_en['txt'], out_jp['txt']], ignore_index=True)  # en, jp 결과 합칠때만 활성화
+            
             print(f'raw shape : {out.shape}')
             print(f'aug shape : {out_en.shape}')
             '''
